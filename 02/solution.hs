@@ -18,10 +18,12 @@ describePosition positions =
 
 calculatePosition :: [(String, Int)] -> (Int, Int) -> (Int, Int)
 calculatePosition [] position = position
-calculatePosition ((movement, value):xs) (hPos, depth)
-  | movement == "forward" = calculatePosition xs (hPos + value, depth)
-  | movement == "down" = calculatePosition xs (hPos, depth + value)
-  | movement == "up" = calculatePosition xs (hPos, depth - value)
+calculatePosition ((movement, value):xs) (hPos, depth) =
+  let newPosition = case movement of
+                      "forward" -> (hPos + value, depth);
+                      "down"    -> (hPos, depth + value);
+                      "up"      -> (hPos, depth - value)  in
+    calculatePosition xs newPosition
 
 betterDescribePosition :: [(String, Int)] -> (Int, Int)
 betterDescribePosition positions =
@@ -29,10 +31,9 @@ betterDescribePosition positions =
 
 betterCalculatePosition :: [(String, Int)] -> (Int, Int, Int) -> (Int, Int)
 betterCalculatePosition [] (hPos, depth, _) = (hPos, depth)
-betterCalculatePosition ((movement, value):xs) (hPos, depth, aim)
-  | movement == "forward" =
-      betterCalculatePosition xs (hPos + value, depth + (aim * value), aim)
-  | movement == "down" =
-      betterCalculatePosition xs (hPos, depth, aim + value)
-  | movement == "up" =
-      betterCalculatePosition xs (hPos, depth, aim - value)
+betterCalculatePosition ((movement, value):xs) (hPos, depth, aim) =
+  let newPosition = case movement of
+                      "forward" -> (hPos + value, depth + (aim * value), aim);
+                      "down"    -> (hPos, depth, aim + value);
+                      "up"      -> (hPos, depth, aim - value) in
+    betterCalculatePosition xs newPosition
