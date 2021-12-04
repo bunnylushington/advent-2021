@@ -73,7 +73,8 @@ bitFilter :: Bit -> Comp -> [String] -> Int -> [String]
 bitFilter keepBit comp samples position
   | (length samples) == 1 = samples
   | otherwise =
-      chooseSamples comp keepBit $ foldl' (splitSamples position) ([],[]) samples
+      chooseSamples comp keepBit $
+      foldl' (splitSamples position) ([],[]) samples
 
 splitSamples :: Int -> Sample -> String -> Sample
 splitSamples position (zeros, ones) sample =
